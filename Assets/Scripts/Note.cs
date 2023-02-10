@@ -23,23 +23,22 @@ public class Note : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Check")
+        if(isStaying)
         {
-            isStaying = true;
+            return;
+        }
 
-            float timing = transform.position.z + 2.25f;
+        isStaying = true;
 
-            if(timing <= perfectTiming)
+        if(other.gameObject.CompareTag("Check"))
+        {
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.J) || Input.GetKeyDown(KeyCode.K))
             {
                 GameSceneData.sharedInstance.AddPerfect();
             }
-            else if(timing <= goodTiming)
-            {
-                GameSceneData.sharedInstance.AddGood();
-            }
             else
             {
-                GameSceneData.sharedInstance.AddMiss();
+                //GameSceneData.sharedInstance.AddMiss();
             }
         }
     }
