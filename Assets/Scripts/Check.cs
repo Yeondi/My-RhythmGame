@@ -19,6 +19,8 @@ public class Check : MonoBehaviour
 
     List<Note> m_Notes;
 
+    public string NoteLayer = "Note";
+
     private void Start()
     {
         m_Notes = GenerateNote.instance.GetNotes();
@@ -67,7 +69,7 @@ public class Check : MonoBehaviour
 #endif
 
         //ÅÍÄ¡¿ë
-        if(Input.touchCount > 0 || Input.GetMouseButtonDown(0))
+        if (Input.touchCount > 0 || Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
 #if !UNITY_EDITOR
@@ -81,7 +83,7 @@ public class Check : MonoBehaviour
 
             if (hit.collider != null)
             {
-                if(hit.transform.tag == "Check")
+                if (hit.transform.tag == "Check")
                     hit.transform.GetComponent<MeshRenderer>().material = materials[1];
                 CheckTiming();
             }
@@ -115,10 +117,11 @@ public class Check : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //if (other.tag == "Note")
-        //{
-        //    isStaying = true;
-        //}
+        if (other.gameObject.layer == LayerMask.NameToLayer(NoteLayer))
+        {
+            other.gameObject.SetActive(false);
+        }
+
     }
 
     private void OnTriggerExit(Collider other)
