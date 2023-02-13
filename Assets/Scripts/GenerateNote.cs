@@ -18,29 +18,11 @@ public class GenerateNote : MonoBehaviour
 
     bool isFinish = false;
 
-    int nPoolSize = 30;
-
-    Queue<Note> poolingObjectQueue = new Queue<Note>();
-
-    List<Note> notes = new List<Note>();
-
     void Start()
     {
         instance = this;
-        Initialize();
         LoadData();
 
-        //GameSceneData.sharedInstance.PlayMusic();
-
-        notes = poolingObjectQueue.ToList();
-    }
-
-    void Initialize()
-    {
-        for(int i=0;i<nPoolSize;i++)
-        {
-            poolingObjectQueue.Enqueue(CreateNewNote());
-        }
     }
 
     Note CreateNewNote()
@@ -53,44 +35,25 @@ public class GenerateNote : MonoBehaviour
 
     static Note GetNote()
     {
-        if(instance.poolingObjectQueue.Count > 0)
-        {
-            var obj = instance.poolingObjectQueue.Dequeue();
-            obj.transform.SetParent(null);
-            obj.gameObject.SetActive(true);
-
-            return obj;
-        }
-        else
-        {
-            var newObj = instance.CreateNewNote();
-            newObj.gameObject.SetActive(true);
-            newObj.transform.SetParent(null);
-            return newObj;
-        }
+        var newObj = instance.CreateNewNote();
+        newObj.gameObject.SetActive(true);
+        newObj.transform.SetParent(null);
+        return newObj;
     }
-
-    public void ReturnObject(Note obj)
-    {
-        obj.gameObject.SetActive(false);
-        obj.transform.SetParent(instance.transform);
-        instance.poolingObjectQueue.Enqueue(obj);
-    }
-
     void Update()
     {
-        if(isFinish)
+        if (isFinish)
         {
             isFinish = false;
 
-            for(int i=0;i<player.nIndex.Count;i++)
+            for (int i = 0; i < player.nIndex.Count; i++)
             {
-                StartCoroutine(InstantiateNoteAtTime(player,i));
+                StartCoroutine(InstantiateNoteAtTime(player, i));
             }
         }
     }
 
-    IEnumerator InstantiateNoteAtTime(SaveData savedData,int __index)
+    IEnumerator InstantiateNoteAtTime(SaveData savedData, int __index)
     {
         yield return new WaitForSeconds((float)savedData.dTime[__index]);
 
@@ -112,26 +75,6 @@ public class GenerateNote : MonoBehaviour
 
         //Instantiate(goSingleNote, transform.position, transform.rotation);
     }
-
-    public void CheckTiming(string keyBinding = "")
-    {
-        for(int i=0;i< poolingObjectQueue.Count;i++)
-        {
-            float zPos = notes[i].transform.localPosition.z;
-
-            if (zPos >= 23.35f && zPos <= 24.25f)
-            {
-                GameSceneData.sharedInstance.AddPerfect();
-                ReturnObject(notes[i]);
-            }
-            //else if((zPos >= 20.29f && zPos <= 23.34) || (zPos >= 24.26 && zPos <= 26.06))
-            else
-            {
-                //GameSceneData.sharedInstance.AddMiss();
-            }
-        }
-    }
-
     public void LoadData()
     {
         string data = LoadFile(GetPath(GameSceneData.sharedInstance.getAudioName()));
@@ -163,10 +106,5 @@ public class GenerateNote : MonoBehaviour
         SaveData data = JsonUtility.FromJson<SaveData>(jsonData);
 
         return data;
-    }
-
-    public List<Note> GetNotes()
-    {
-        return notes;
     }
 }
