@@ -132,6 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goSingleNote: {fileID: 1129858977718131334, guid: bcdeea1a2710bcf4095794b9d339b21d, type: 3}
+  goSlideNote: {fileID: 1559315692493698082, guid: 4e8343e85e807654eb8735c14c4f2b82, type: 3}
   goGenerationLane:
   - {fileID: 2621670925620738998}
   - {fileID: 2621670926239314617}

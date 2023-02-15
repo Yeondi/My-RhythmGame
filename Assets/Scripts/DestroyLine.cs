@@ -11,5 +11,10 @@ public class DestroyLine : MonoBehaviour
             Destroy(other.gameObject);
             GameSceneData.sharedInstance.AddMiss();
         }
+        else if(other.CompareTag("End"))
+        {
+            Destroy(other.transform.parent.gameObject);
+            GameSceneData.sharedInstance.AddMiss();
+        }
     }
 }

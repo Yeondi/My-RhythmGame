@@ -21,15 +21,12 @@ public class GameSceneData : MonoBehaviour
     [SerializeField]
     int nPerfect = 0;
     [SerializeField]
-    int nGood = 0;
-    [SerializeField]
     int nMiss = 0;
     [SerializeField]
     int nTotalScore = 0;
 
     public GameObject PopUp;
     public TMP_Text tmpPerfect;
-    public TMP_Text tmpGood;
     public TMP_Text tmpMiss;
     public TMP_Text tmpScore;
 
@@ -38,15 +35,8 @@ public class GameSceneData : MonoBehaviour
     [SerializeField]
     GameObject goScorePopUp;
     public TMP_Text resultPerfect;
-    public TMP_Text resultGood;
     public TMP_Text resultMiss;
     public TMP_Text resultTotalScore;
-
-    #region Test
-    bool isTest = false;
-    [SerializeField]
-    SongInfo testInfo;
-    #endregion
 
     private void Awake()
     {
@@ -55,13 +45,9 @@ public class GameSceneData : MonoBehaviour
         else
             sharedInstance = this;
 
-        if (!isTest)
-            songInfo = SelectSceneData.sharedInstance.getSong();
-        else
-            songInfo = testInfo;
+        songInfo = SelectSceneData.sharedInstance.getSong();
 
-        if (!isTest)
-            Destroy(SelectSceneData.sharedInstance.gameObject);
+        Destroy(SelectSceneData.sharedInstance.gameObject);
 
         title = song.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>();
         album_Title = song.transform.GetChild(0).GetChild(1).GetComponent<TMP_Text>();
@@ -97,15 +83,15 @@ public class GameSceneData : MonoBehaviour
         }
         else if (AudioSource.clip.name == "Dynamite")
         {
-            yield return new WaitForSeconds(7.3f);
+            yield return new WaitForSeconds(3.5f);
             bStarted = true;
         }
         else if (AudioSource.clip.name == "ANTIFRAGILE")
         {
-            yield return new WaitForSeconds(7.3f);
+            yield return new WaitForSeconds(3.5f);
             bStarted = true;
         }
-        
+
         AudioSource.Play();
     }
 
@@ -116,7 +102,7 @@ public class GameSceneData : MonoBehaviour
 
         UpdateScore();
 
-        if(AudioSource.isPlaying == false && bStarted)
+        if (AudioSource.isPlaying == false && bStarted)
         {
             goScorePopUp.SetActive(true);
             ResultGame();
@@ -130,7 +116,7 @@ public class GameSceneData : MonoBehaviour
         album_Title.text = songInfo.albumTitle.text;
         singer.text = songInfo.singerName.text;
     }
-     
+
     public void PauseGame()
     {
         AudioSource.Pause();
@@ -141,7 +127,6 @@ public class GameSceneData : MonoBehaviour
     public void ResultGame()
     {
         resultPerfect.text = tmpPerfect.text;
-        resultGood.text = tmpGood.text;
         resultMiss.text = tmpMiss.text;
         resultTotalScore.text = tmpScore.text;
     }
@@ -162,16 +147,13 @@ public class GameSceneData : MonoBehaviour
     {
         tmpPerfect.text = "Perfect : " + nPerfect;
         tmpMiss.text = "Miss : " + nMiss;
-        tmpGood.text = "Good : " + nGood;
 
-        nTotalScore = (nPerfect * 10) + (nGood * 5) - (nMiss * 5);
+        nTotalScore = (nPerfect * 10) - (nMiss * 5);
         tmpScore.text = "Total Score : " + nTotalScore;
     }
 
-    public string getAudioName()
+    public string GetAudioName()
     {
-        if (AudioSource == null)
-            return testInfo.SongFile.name;
         return AudioSource.clip.name;
     }
 
@@ -183,16 +165,6 @@ public class GameSceneData : MonoBehaviour
     public int GetPerfect()
     {
         return nPerfect;
-    }
-
-    public void AddGood()
-    {
-        nGood++;
-    }
-
-    public int GetGood()
-    {
-        return nGood;
     }
 
     public void AddMiss()

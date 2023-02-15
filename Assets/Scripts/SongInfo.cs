@@ -18,7 +18,7 @@ public class SongInfo : MonoBehaviour
 
     public AudioSource audioSource;
 
-    private void Start()
+    private void Awake()
     {
         audioSource = gameObject.GetComponent<AudioSource>();
         audioSource.clip = PreviewFile;

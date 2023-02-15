@@ -10,14 +10,6 @@ public class Note : MonoBehaviour
     public float goodTiming = 0.1f;
 
     public bool isStaying = false;
-
-    Vector3 m_DownPos;
-
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
         transform.localPosition += Vector3.forward * fVelocity * Time.deltaTime;
@@ -32,7 +24,7 @@ public class Note : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.tag == "Check")
+        if(other.gameObject.CompareTag("Check"))
         {
             isStaying = false;
         }
